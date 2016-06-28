@@ -1,0 +1,81 @@
+MAP
+  NAME "sample"
+  EXTENT -180 -90 180 90 # Geographic
+  SIZE 800 600
+  STATUS ON
+  IMAGECOLOR 255 255 255
+  SHAPEPATH "/usr/local/mapserver/data/"
+
+  PROJECTION
+    "init=epsg:4326"
+  END
+
+  CONFIG "MS_ERRORFILE" stderr
+  DEBUG 1
+
+  WEB
+  METADATA
+    "wms_title"           "WMS Demo Server"
+    "wms_onlineresource"  "http://my.host.com/cgi-bin/mapserv?map=wms.map&"
+    "wms_srs"             "EPSG:4326"
+  END
+  END
+
+  LAYER
+    NAME "brazil_glad_2016"
+    TYPE RASTER
+    PROCESSING "NODATA=0"
+    PROCESSING "BANDS=1"
+
+    STATUS DEFAULT
+    DATA "/usr/local/mapserver/data/roc_day2015.tif"
+
+    CLASS
+      NAME "red"
+      EXPRESSION ([pixel] > 0)
+      STYLE
+        COLOR 255 0 0
+      END
+    END
+    #TRANSPARENCY 50
+    PROJECTION
+      "+proj=longlat +datum=WGS84 +no_defs"
+    END
+  END # LAYER
+
+  LAYER
+    NAME "dataraster"
+    TYPE RASTER
+    PROCESSING "BANDS=1"
+
+    STATUS DEFAULT
+    DATA "/usr/local/mapserver/data/dataraster.tif"
+
+    CLASS
+      NAME "red"
+      EXPRESSION ([pixel] > 0)
+      STYLE
+        COLOR 255 0 0
+      END
+    END
+    OFFSITE 0 0 0
+    #TRANSPARENCY 50
+    PROJECTION
+      "+proj=utm +zone=30 +datum=WGS84 +units=m +no_defs"
+    END
+  END # LAYER
+
+  LAYER
+    NAME         countries
+    DATA         ne_10m_admin_0_countries
+    STATUS       DEFAULT
+    TYPE         POLYGON
+    CLASS
+      NAME       "countries"
+      STYLE
+        COLOR    232 232 232
+      END
+    END
+    TRANSPARENCY 50
+  END
+END # MAP
